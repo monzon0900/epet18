@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EPET N° 18 – Puerto Esperanza, Misiones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <style>
+    /* ── VARIABLES ─────────────────────────────────────────── */
+    :root {
+      --v-oscuro:  #062916;   /* verde selva oscuro */
+      --v-medio:   #0d5229;   /* verde medio */
+      --v-claro:   #17743d;   /* verde claro / íconos */
+      --v-palido:  #dceee5;   /* fondos suaves verdes */
+      --azul:      #0047ff;   /* acento azul eléctrico */
+      --azul-c:    #4d93ff;   /* azul claro sobre fondos oscuros */
+      --blanco:    #ffffff;
+      --gris-bg:   #f3f7f5;
+      --gris-bg2:  #e8eeeb;
+      --gris-txt:  #374840;
+      --gris-clr:  #687a72;
+      --negro:     #0b1a12;
+      --ff-titulo: 'Playfair Display', serif;
+      --ff-cuerpo: 'DM Sans', sans-serif;
+      --s-sm: 0 2px 14px rgba(6,41,22,.10);
+      --s-md: 0 6px 32px rgba(6,41,22,.15);
+      --s-lg: 0 16px 60px rgba(6,41,22,.20);
+      --r:    12px;
+      --r-lg: 20px;
+    }
+
+    /* ── RESET / BASE ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-cuerpo); color: var(--gris-txt); background: var(--blanco); overflow-x: hidden; }
+    h1,h2,h3,h4,h5 { font-family: var(--ff-titulo); }
+    a { text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    section { padding: 88px 0; }
+
+    /* ── NAVBAR ────────────────────────────────────────────── */
+    /*
+      ESTADO INICIAL (transparente, sobre el hero verde oscuro):
+        → todos los textos y links en BLANCO
+      ESTADO SCROLLED (fondo blanco):
+        → todos los textos en verde oscuro / gris
+    */
+    #navbar {
+      position: fixed; top:0; left:0; width:100%;
+      z-index: 1000;
+      padding: 16px 0;
+      /* fondo transparente inicial — se ve el hero detrás */
+      transition: background .35s, box-shadow .35s, padding .35s;
+    }
+    #navbar.scrolled {
+      background: #fff;
+      box-shadow: var(--s-sm);
+      padding: 10px 0;
+    }
+
+    /* Emblema redondo */
+    .brand-emblem {
+      width:44px; height:44px; border-radius:50%;
+      background: var(--v-medio);
+      border: 2px solid rgba(255,255,255,.45);
+      display:grid; place-items:center;
+      font-family: var(--ff-titulo);
+      font-size:11px; font-weight:700; line-height:1.2;
+      color: #fff; text-align:center; flex-shrink:0;
+      transition: border-color .35s;
+    }
+    #navbar.scrolled .brand-emblem { border-color: var(--v-palido); }
+
+    /* "Puerto Esperanza, Misiones" — BLANCO por defecto */
+    .brand-sub {
+      font-size:11px; font-weight:500;
+      letter-spacing:.09em; text-transform:uppercase;
+      line-height:1;
+      color: rgba(255,255,255,.88); /* blanco sobre hero */
+      transition: color .35s;
+    }
+    #navbar.scrolled .brand-sub { color: var(--gris-clr); } /* gris legible sobre blanco */
+
+    /* "EPET N° 18" — BLANCO por defecto */
+    .brand-name {
+      font-family: var(--ff-titulo);
+      font-size:18px; line-height:1.1;
+      color: #fff; /* blanco sobre hero */
+      transition: color .35s;
+    }
+    #navbar.scrolled .brand-name { color: var(--v-oscuro); } /* oscuro sobre blanco */
+
+    /* Links del menú — BLANCOS por defecto */
+    #navbar .nav-link {
+      font-size:14px; font-weight:500; letter-spacing:.04em;
+      color: rgba(255,255,255,.92) !important;
+      padding: 7px 14px !important; border-radius:6px;
+      transition: background .2s, color .2s;
+    }
+    #navbar .nav-link:hover,
+    #navbar .nav-link.active {
+      background: rgba(255,255,255,.18);
+      color: #fff !important;
+    }
+    /* Al scroll → oscuros */
+    #navbar.scrolled .nav-link { color: var(--v-oscuro) !important; }
+    #navbar.scrolled .nav-link:hover,
+    #navbar.scrolled .nav-link.active {
+      background: var(--v-palido);
+      color: var(--v-medio) !important;
+    }
+
+    /* Ícono hamburguesa — BLANCO por defecto */
+    .toggler-btn { background:none; border:none; padding:4px; cursor:pointer; }
+    .toggler-btn:focus { outline:none; box-shadow:none; }
+    .toggler-icon {
+      font-size:2rem; line-height:1;
+      color: #fff; /* blanco sobre hero */
+      transition: color .35s;
+    }
+    #navbar.scrolled .toggler-icon { color: var(--v-oscuro); }
+
+    /* Menú móvil — siempre sobre fondo blanco, texto oscuro */
+    #mobileMenu {
+      display: none;
+      background: #fff;
+      border-radius: 0 0 var(--r) var(--r);
+      box-shadow: var(--s-md);
+      margin-top: 4px;
+    }
+    #mobileMenu .nav-link {
+      color: var(--v-oscuro) !important;
+      padding: 10px 16px !important;
+      border-radius: 6px;
+    }
+    #mobileMenu .nav-link:hover { background: var(--v-palido); color: var(--v-medio) !important; }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0; position: relative;
+      /*
+        Imagen: laboratorio/taller técnico representativo.
+        Gradiente denso a la izquierda para que el texto
+        blanco sea siempre legible.
+      */
+      background:
+        linear-gradient(
+          110deg,
+          rgba(6,41,22,.97)  0%,
+          rgba(6,41,22,.88) 42%,
+          rgba(13,82,41,.62) 70%,
+          rgba(23,116,61,.30) 100%
+        ),
+        url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=1600&q=80')
+        center / cover no-repeat;
+    }
+    .hero-inner { padding-top:110px; padding-bottom:64px; }
+
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.28);
+      backdrop-filter: blur(6px);
+      color: var(--azul-c);
+      font-size:12px; font-weight:600;
+      letter-spacing:.12em; text-transform:uppercase;
+      padding: 7px 18px; border-radius:50px;
+      margin-bottom:26px;
+    }
+    .hero-h1 {
+      font-size: clamp(2.4rem,6vw,4.8rem);
+      color: #fff; line-height:1.08; margin-bottom:20px;
+    }
+    .hero-h1 .acento { color: var(--azul-c); }
+
+    .hero-p {
+      font-size: clamp(.97rem,2vw,1.13rem);
+      color: rgba(255,255,255,.84);
+      font-weight:300; max-width:540px;
+      margin-bottom:36px; line-height:1.78;
+    }
+
+    .btn-azul {
+      display:inline-block;
+      background: var(--azul); color:#fff !important;
+      font-weight:600; font-size:15px;
+      padding:13px 30px; border-radius:8px; border:none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-azul:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,71,255,.45); }
+
+    .btn-outline-w {
+      display:inline-block;
+      background:transparent; color:#fff !important;
+      font-weight:500; font-size:15px;
+      padding:13px 30px; border-radius:8px;
+      border:2px solid rgba(255,255,255,.55);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline-w:hover { border-color:#fff; background:rgba(255,255,255,.10); }
+
+    .hero-stats { margin-top:52px; display:flex; gap:40px; flex-wrap:wrap; }
+    .stat-num {
+      font-family:var(--ff-titulo); font-size:2.4rem;
+      line-height:1; color: var(--azul-c);
+    }
+    .stat-lbl { font-size:13px; color:rgba(255,255,255,.70); margin-top:4px; }
+
+    .hero-scroll {
+      position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+      color:rgba(255,255,255,.60); font-size:13px;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform:translateX(-50%) translateY(0);   }
+      50%      { transform:translateX(-50%) translateY(8px); }
+    }
+
+    /* ── ENCABEZADOS DE SECCIÓN ────────────────────────────── */
+    .eyebrow {
+      display:inline-block; font-size:12px; font-weight:600;
+      letter-spacing:.14em; text-transform:uppercase;
+      color: var(--v-claro); margin-bottom:10px;
+    }
+    .sec-titulo {
+      font-size:clamp(1.8rem,4vw,3rem);
+      color: var(--v-oscuro); margin-bottom:14px; line-height:1.15;
+    }
+    .sec-bajada {
+      font-size:1.04rem; color:var(--gris-txt);
+      max-width:620px; line-height:1.78;
+    }
+    .linea { width:56px; height:4px; background:var(--azul); border-radius:2px; margin:12px 0 26px; }
+
+    /* ── SOBRE NOSOTROS ────────────────────────────────────── */
+    #about { background: var(--gris-bg); }
+
+    .about-foto {
+      border-radius:var(--r-lg); width:100%; height:420px;
+      object-fit:cover; box-shadow:var(--s-lg);
+    }
+    .about-wrap { position:relative; }
+    .about-badge {
+      position:absolute; bottom:-22px; right:-10px;
+      background:var(--v-medio); color:#fff;
+      padding:16px 20px; border-radius:var(--r); box-shadow:var(--s-md); text-align:center;
+    }
+    .about-badge .bn { font-family:var(--ff-titulo); font-size:2.2rem; line-height:1; color:var(--azul-c); }
+    .about-badge .bt { font-size:12px; opacity:.88; margin-top:4px; }
+
+    .valor-card {
+      display:flex; gap:16px; align-items:flex-start;
+      background:#fff; border-radius:var(--r);
+      padding:18px 20px; margin-bottom:14px;
+      border:1px solid rgba(13,82,41,.12);
+      transition: box-shadow .2s;
+    }
+    .valor-card:hover { box-shadow:var(--s-sm); }
+    .valor-ico {
+      width:46px; height:46px; flex-shrink:0;
+      background:var(--v-palido); border-radius:10px;
+      display:grid; place-items:center;
+      font-size:20px; color:var(--v-claro);
+    }
+    .valor-card h5 { font-size:.98rem; color:var(--v-oscuro); margin-bottom:4px; }
+    .valor-card p  { font-size:.87rem; color:var(--gris-txt); margin:0; line-height:1.55; }
+
+    /* ── PROGRAMAS ─────────────────────────────────────────── */
+    #programs { background:#fff; }
+
+    .ciclo-bloque {
+      border-radius:var(--r); padding:20px 24px;
+      border:1px solid rgba(13,82,41,.14);
+      border-left:5px solid var(--azul);
+      background:var(--gris-bg); margin-bottom:26px;
+    }
+    .ciclo-ico {
+      width:56px; height:56px; flex-shrink:0;
+      background:var(--v-palido); border-radius:12px;
+      display:grid; place-items:center;
+      font-size:24px; color:var(--v-claro);
+    }
+    .prog-card {
+      border-radius:var(--r-lg); overflow:hidden;
+      box-shadow:var(--s-sm); border:1px solid rgba(13,82,41,.10);
+      height:100%; transition:transform .25s, box-shadow .25s;
+    }
+    .prog-card:hover { transform:translateY(-6px); box-shadow:var(--s-md); }
+    .prog-foto { height:200px; width:100%; object-fit:cover; }
+    .prog-body { padding:24px; }
+    .prog-tag {
+      display:inline-block; font-size:11px; font-weight:600;
+      letter-spacing:.08em; text-transform:uppercase;
+      padding:4px 12px; border-radius:50px;
+      background:var(--v-palido); color:var(--v-claro); margin-bottom:10px;
+    }
+    .prog-card h3 { font-size:1.32rem; color:var(--v-oscuro); margin-bottom:10px; }
+    .prog-card p  { color:var(--gris-txt); font-size:.91rem; line-height:1.70; }
+    .prog-lista { list-style:none; padding:0; margin:12px 0 0; }
+    .prog-lista li {
+      display:flex; align-items:center; gap:10px;
+      font-size:.87rem; color:var(--gris-txt);
+      padding:5px 0; border-bottom:1px solid var(--gris-bg);
+    }
+    .prog-lista li:last-child { border-bottom:none; }
+    .prog-lista li i { color:var(--v-claro); font-size:13px; flex-shrink:0; }
+    .prog-salidas { padding:0 24px 22px; }
+    .prog-salidas strong { font-size:.84rem; color:var(--v-oscuro); display:block; margin-bottom:4px; }
+    .prog-salidas p { font-size:.81rem; color:var(--gris-txt); margin:0; }
+
+    /* ── NOTICIAS ──────────────────────────────────────────── */
+    #news { background:var(--gris-bg2); }
+
+    .noticia-card {
+      background:#fff; border-radius:var(--r-lg); overflow:hidden;
+      box-shadow:var(--s-sm); border:1px solid rgba(13,82,41,.08);
+      height:100%; display:flex; flex-direction:column;
+      transition:transform .25s, box-shadow .25s;
+    }
+    .noticia-card:hover { transform:translateY(-5px); box-shadow:var(--s-md); }
+    .noticia-foto { height:178px; width:100%; object-fit:cover; }
+    .noticia-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+    .noticia-meta { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .noticia-tag {
+      font-size:11px; font-weight:600;
+      letter-spacing:.08em; text-transform:uppercase;
+      padding:3px 10px; border-radius:50px;
+      background:var(--v-palido); color:var(--v-claro);
+    }
+    .noticia-fecha { font-size:12px; color:var(--gris-clr); }
+    .noticia-card h4 { font-size:1rem; color:var(--v-oscuro); margin-bottom:8px; line-height:1.35; }
+    .noticia-card p  { font-size:.87rem; color:var(--gris-txt); line-height:1.65; flex:1; margin:0; }
+    .noticia-pie { padding:12px 20px; border-top:1px solid var(--gris-bg2); }
+    .leer-mas {
+      font-size:.84rem; font-weight:600; color:var(--azul);
+      display:flex; align-items:center; gap:6px; transition:gap .2s;
+    }
+    .leer-mas:hover { gap:10px; color:var(--v-oscuro); }
+
+    /* ── GALERÍA ───────────────────────────────────────────── */
+    #gallery { background:#fff; }
+
+    .galeria-grid {
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:10px;
+    }
+    .g-item {
+      border-radius:var(--r); overflow:hidden; position:relative; cursor:pointer;
+    }
+    .g-item img {
+      width:100%; height:100%; object-fit:cover; transition:transform .4s;
+    }
+    .g-item:hover img { transform:scale(1.06); }
+    .g-overlay {
+      position:absolute; inset:0;
+      background:rgba(6,41,22,.50);
+      opacity:0; display:grid; place-items:center;
+      color:#fff; font-size:22px; transition:opacity .3s;
+    }
+    .g-item:hover .g-overlay { opacity:1; }
+    .g1 { grid-column:1/8;  height:272px; }
+    .g2 { grid-column:8/13; height:272px; }
+    .g3 { grid-column:1/5;  height:212px; }
+    .g4 { grid-column:5/9;  height:212px; }
+    .g5 { grid-column:9/13; height:212px; }
+
+    /* ── CONTACTO ──────────────────────────────────────────── */
+    #contact { background:var(--gris-bg); }
+
+    .contacto-info {
+      background:var(--v-oscuro); border-radius:var(--r-lg);
+      padding:36px 28px; height:100%;
+    }
+    .contacto-info h3 { font-size:1.5rem; color:#fff; margin-bottom:8px; }
+    .contacto-info > p { color:rgba(255,255,255,.66); font-size:.91rem; margin-bottom:28px; }
+
+    .dato { display:flex; gap:14px; align-items:flex-start; margin-bottom:20px; }
+    .dato-ico {
+      width:42px; height:42px; flex-shrink:0;
+      background:rgba(255,255,255,.10); border-radius:9px;
+      display:grid; place-items:center;
+      color:var(--azul-c); font-size:16px;
+    }
+    .dato-lbl {
+      font-size:10px; font-weight:700;
+      letter-spacing:.11em; text-transform:uppercase;
+      color:var(--azul-c); margin-bottom:2px;
+    }
+    .dato-val { font-size:.89rem; color:rgba(255,255,255,.84); }
+    .dato-val a { color:rgba(255,255,255,.84); }
+    .dato-val a:hover { color:var(--azul-c); }
+
+    .social-link {
+      width:38px; height:38px;
+      background:rgba(255,255,255,.10); border-radius:8px;
+      display:grid; place-items:center;
+      color:#fff; font-size:15px;
+      transition:background .2s;
+    }
+    .social-link:hover { background:var(--azul); }
+
+    .contacto-form {
+      background:#fff; border-radius:var(--r-lg);
+      padding:36px 28px; box-shadow:var(--s-sm);
+      border:1px solid rgba(13,82,41,.10);
+    }
+    .contacto-form h3 { font-size:1.5rem; color:var(--v-oscuro); margin-bottom:20px; }
+    .form-label { font-size:.84rem; font-weight:600; color:var(--v-oscuro); margin-bottom:5px; }
+    .form-control, .form-select {
+      border:1.5px solid rgba(13,82,41,.22); border-radius:8px;
+      font-size:.9rem; padding:9px 13px;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color:var(--azul); box-shadow:0 0 0 3px rgba(0,71,255,.12);
+    }
+    textarea.form-control { resize:vertical; min-height:115px; }
+    .btn-enviar {
+      background:var(--v-medio); color:#fff;
+      font-weight:600; font-size:.95rem;
+      padding:12px 26px; border-radius:8px; border:none;
+      width:100%; cursor:pointer;
+      transition:background .2s, transform .15s;
+    }
+    .btn-enviar:hover { background:var(--v-oscuro); transform:translateY(-1px); }
+    #form-alert { display:none; margin-top:12px; }
+
+    .mapa { border-radius:var(--r-lg); overflow:hidden; margin-top:36px; box-shadow:var(--s-sm); }
+    .mapa iframe { display:block; border:0; }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer { background:var(--negro); color:rgba(255,255,255,.60); padding:54px 0 20px; }
+    .footer-marca { font-family:var(--ff-titulo); font-size:1.22rem; color:#fff; margin-bottom:10px; }
+    .footer-desc { font-size:.84rem; line-height:1.72; color:rgba(255,255,255,.48); margin-bottom:18px; }
+    .footer-titulo {
+      font-family:var(--ff-cuerpo); font-size:.78rem; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--azul-c); margin-bottom:13px;
+    }
+    .footer-links { list-style:none; padding:0; margin:0; }
+    .footer-links li { margin-bottom:7px; }
+    .footer-links a   { font-size:.86rem; color:rgba(255,255,255,.50); transition:color .2s; }
+    .footer-links a:hover { color:var(--azul-c); }
+    .footer-links span { font-size:.86rem; color:rgba(255,255,255,.50); }
+    .footer-bottom {
+      border-top:1px solid rgba(255,255,255,.10);
+      margin-top:36px; padding-top:16px;
+      font-size:.77rem; text-align:center; color:rgba(255,255,255,.32);
+    }
+
+    /* ── FADE-IN ───────────────────────────────────────────── */
+    .fade-in { opacity:0; transform:translateY(24px); transition:opacity .65s ease, transform .65s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width:992px) { section { padding:70px 0; } }
+    @media (max-width:768px) {
+      section { padding:54px 0; }
+      .about-badge { right:0; bottom:-16px; }
+      .galeria-grid { grid-template-columns:1fr 1fr; }
+      .g1,.g2,.g3,.g4,.g5 { grid-column:auto; height:150px; }
+      .g1 { grid-column:1/3; height:190px; }
+      .hero-stats { gap:22px; }
+      .contacto-info, .contacto-form { padding:24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAVBAR ═══════════════════════════ -->
+<nav id="navbar" aria-label="Navegación principal">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between">
+
+      <a href="#hero" class="d-flex align-items-center gap-3">
+        <div class="brand-emblem" aria-hidden="true">EPET<br>N°18</div>
+        <div>
+          <div class="brand-sub">Puerto Esperanza, Misiones</div>
+          <div class="brand-name">EPET N° 18</div>
+        </div>
+      </a>
+
+      <!-- Desktop -->
+      <ul class="nav d-none d-lg-flex align-items-center gap-1 mb-0 list-unstyled">
+        <li><a class="nav-link active" href="#hero">Inicio</a></li>
+        <li><a class="nav-link" href="#about">Nosotros</a></li>
+        <li><a class="nav-link" href="#programs">Programas</a></li>
+        <li><a class="nav-link" href="#news">Noticias</a></li>
+        <li><a class="nav-link" href="#gallery">Galería</a></li>
+        <li><a class="nav-link" href="#contact">Contacto</a></li>
+      </ul>
+
+      <!-- Hamburguesa -->
+      <button class="toggler-btn d-lg-none" id="menuToggle"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+        <i class="bi bi-list toggler-icon" id="togglerIcon"></i>
+      </button>
+    </div>
+
+    <!-- Móvil -->
+    <div id="mobileMenu" aria-label="Menú móvil">
+      <ul class="nav flex-column gap-1 py-3 px-1 mb-0 list-unstyled">
+        <li><a class="nav-link" href="#hero">Inicio</a></li>
+        <li><a class="nav-link" href="#about">Nosotros</a></li>
+        <li><a class="nav-link" href="#programs">Programas</a></li>
+        <li><a class="nav-link" href="#news">Noticias</a></li>
+        <li><a class="nav-link" href="#gallery">Galería</a></li>
+        <li><a class="nav-link" href="#contact">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ══════════════════════════════ -->
+<section id="hero" aria-label="Bienvenida">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <i class="bi bi-award-fill"></i>
+        Educación Técnica de Excelencia · Misiones
+      </div>
+      <h1 class="hero-h1">
+        Formando los <span class="acento">técnicos</span><br>del mañana
+      </h1>
+      <p class="hero-p">
+        La Escuela Provincial de Educación Técnica N° 18 ofrece formación integral con orientación en Técnico en Equipos e Instalaciones Electromecánicas, aprendizaje basado en proyectos y compromiso con la comunidad de Puerto Esperanza.
+      </p>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="#programs" class="btn-azul">Conocé nuestros programas</a>
+        <a href="#contact"  class="btn-outline-w">Contactanos</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">400+</div><div class="stat-lbl">Estudiantes</div></div>
+        <div><div class="stat-num">1</div><div class="stat-lbl">Orientación técnica</div></div>
+        <div><div class="stat-num">50+</div><div class="stat-lbl">Proyectos en Expo Técnica</div></div>
+        <div><div class="stat-num">4.2★</div><div class="stat-lbl">Calificación general</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Desplazate</span>
+    <i class="bi bi-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ═══════════════════ NOSOTROS ══════════════════════════ -->
+<section id="about" aria-labelledby="h-about">
+  <div class="container">
+    <div class="row gy-5 align-items-center">
+
+      <div class="col-lg-5 fade-in">
+        <div class="about-wrap">
+          <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80"
+               alt="Estudiantes en laboratorio de la EPET N°18"
+               class="about-foto" style="margin-bottom:30px;"/>
+          <div class="about-badge">
+            <div class="bn">+10</div>
+            <div class="bt">años de<br>innovación</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7 ps-lg-5 fade-in">
+        <span class="eyebrow">Sobre Nosotros</span>
+        <h2 class="sec-titulo" id="h-about">Un pilar en la educación técnica regional</h2>
+        <div class="linea"></div>
+        <p class="sec-bajada mb-4">
+          La EPET N° 18 es una escuela secundaria técnica pública ubicada en Puerto Esperanza, Misiones. Desde su fundación se ha consolidado como referente regional en formación técnico-profesional, combinando rigor académico con proyectos de impacto social y participación en ferias nacionales e internacionales.
+        </p>
+        <div class="row gy-2">
+          <div class="col-12">
+            <div class="valor-card">
+              <div class="valor-ico"><i class="bi bi-bullseye"></i></div>
+              <div>
+                <h5>Misión</h5>
+                <p>Formar profesionales técnicos con sólida base científica, pensamiento crítico y vocación de servicio, capaces de insertarse en el mundo laboral o continuar estudios superiores.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="valor-card">
+              <div class="valor-ico"><i class="bi bi-eye"></i></div>
+              <div>
+                <h5>Visión</h5>
+                <p>Ser la institución técnica de referencia del norte misionero, líder en innovación educativa y vinculación con la comunidad y la industria regional.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="valor-card">
+              <div class="valor-ico"><i class="bi bi-lightbulb"></i></div>
+              <div>
+                <h5>Innovación</h5>
+                <p>Picosatélites, CanSat, ROV submarinos y proyectos de vanguardia.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="valor-card">
+              <div class="valor-ico"><i class="bi bi-people"></i></div>
+              <div>
+                <h5>Inclusión</h5>
+                <p>Educación pública de calidad accesible para toda la comunidad.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROGRAMAS ═════════════════════════ -->
+<section id="programs" aria-labelledby="h-prog">
+  <div class="container">
+    <div class="text-center mb-5 fade-in">
+      <span class="eyebrow">Programas Académicos</span>
+      <h2 class="sec-titulo" id="h-prog">Formación que abre puertas</h2>
+      <div class="linea mx-auto"></div>
+      <p class="sec-bajada mx-auto">Ciclo básico común y orientación técnica de 6 años con laboratorios equipados, talleres y vinculación con la industria.</p>
+    </div>
+
+    <!-- Ciclo Básico -->
+    <div class="fade-in">
+      <div class="ciclo-bloque">
+        <div class="d-flex align-items-center gap-3">
+          <div class="ciclo-ico"><i class="bi bi-book"></i></div>
+          <div>
+            <span class="prog-tag">1° a 3° Año</span>
+            <h3 style="font-size:1.22rem; color:var(--v-oscuro); margin:4px 0 6px;">Ciclo Básico Secundario</h3>
+            <p style="font-size:.9rem; color:var(--gris-txt); margin:0;">Base académica común: matemática, lengua, ciencias naturales y sociales, educación física e introducción a los talleres técnicos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row gy-4">
+      <!-- Electromecánica (orientación única) -->
+      <div class="col-12 fade-in">
+        <div class="prog-card" style="display:flex; flex-direction:row; flex-wrap:wrap;">
+          <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=1000&q=80"
+               alt="Taller de Electromecánica" class="prog-foto"
+               style="height:280px; width:100%; max-width:420px; object-fit:cover; flex-shrink:0;"/>
+          <div style="flex:1; min-width:260px; display:flex; flex-direction:column;">
+            <div class="prog-body" style="flex:1;">
+              <span class="prog-tag"><i class="bi bi-gear-fill me-1"></i>4° a 6° Año</span>
+              <h3>Técnico en Equipos e Instalaciones Electromecánicas</h3>
+              <p>Formación integral en montaje, operación y mantenimiento de sistemas mecánicos, eléctricos y electrónicos aplicados a la industria. Los egresados gestionan instalaciones complejas con autonomía y criterio técnico.</p>
+              <ul class="prog-lista">
+                <li><i class="bi bi-check-circle-fill"></i>Mantenimiento industrial y de maquinaria</li>
+                <li><i class="bi bi-check-circle-fill"></i>Instalaciones eléctricas y electrónicas</li>
+                <li><i class="bi bi-check-circle-fill"></i>Neumática, hidráulica y automatización</li>
+                <li><i class="bi bi-check-circle-fill"></i>Control y sistemas de regulación</li>
+                <li><i class="bi bi-check-circle-fill"></i>Energías renovables y eficiencia energética</li>
+              </ul>
+            </div>
+            <div class="prog-salidas">
+              <strong>Salidas laborales y profesionales:</strong>
+              <p>Plantas industriales, agroindustria, sector forestal, o continuación en Ingeniería Electromecánica, Eléctrica o Industrial.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ NOTICIAS ══════════════════════════ -->
+<section id="news" aria-labelledby="h-news">
+  <div class="container">
+    <div class="row align-items-end mb-5">
+      <div class="col-lg-7 fade-in">
+        <span class="eyebrow">Noticias y Eventos</span>
+        <h2 class="sec-titulo" id="h-news">Logros que nos enorgullecen</h2>
+        <div class="linea"></div>
+        <p class="sec-bajada">Seguí de cerca los proyectos, reconocimientos y eventos de nuestra comunidad escolar.</p>
+      </div>
+    </div>
+    <div class="row gy-4">
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=600&q=80"
+               alt="Proyecto CanSat" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Ciencia</span>
+              <span class="noticia-fecha">2024</span>
+            </div>
+            <h4>Misiones espaciales educativas con CanSat</h4>
+            <p>Estudiantes diseñaron y lanzaron un satélite en miniatura, representando a Misiones en competencias nacionales.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=600&q=80"
+               alt="Expo Técnica" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Evento</span>
+              <span class="noticia-fecha">2024</span>
+            </div>
+            <h4>Expo Técnica 2024: más de 50 proyectos innovadores</h4>
+            <p>La feria anual convocó a toda la comunidad con proyectos desde ROV submarinos hasta sistemas de riego automatizado.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80"
+               alt="Reconocimiento docente" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Reconocimiento</span>
+              <span class="noticia-fecha">2023</span>
+            </div>
+            <h4>Reconocimiento nacional al docente Edgardo Doberstein</h4>
+            <p>Distinguido por su proyecto de construcción de mobiliario escolar junto a sus alumnos para comunidades vulnerables.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=600&q=80"
+               alt="ROV submarino" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Tecnología</span>
+              <span class="noticia-fecha">2023</span>
+            </div>
+            <h4>Estudiantes construyen submarine ROV para exploración subacuática</h4>
+            <p>Alumnos de 5° y 6° año diseñaron y construyeron un vehículo operado remotamente para exploración de ríos de la región.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=600&q=80"
+               alt="Feria Nacional de Ciencias" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Ciencia</span>
+              <span class="noticia-fecha">2023</span>
+            </div>
+            <h4>Clasificación a la Feria Nacional de Ciencias</h4>
+            <p>Dos proyectos clasificaron a la instancia nacional representando a Misiones con investigaciones en electrónica de bajo costo y automatización aplicada.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-in">
+        <div class="noticia-card">
+          <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&q=80"
+               alt="Picosatélites" class="noticia-foto" loading="lazy"/>
+          <div class="noticia-body">
+            <div class="noticia-meta">
+              <span class="noticia-tag">Innovación</span>
+              <span class="noticia-fecha">2022</span>
+            </div>
+            <h4>Desarrollo de picosatélites para misiones educativas</h4>
+            <p>Participación en el diseño y ensamblaje de picosatélites en el marco de una iniciativa nacional de alfabetización espacial.</p>
+          </div>
+          <div class="noticia-pie"><a href="#" class="leer-mas">Leer más <i class="bi bi-arrow-right"></i></a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ GALERÍA ═══════════════════════════ -->
+<section id="gallery" aria-labelledby="h-gal">
+  <div class="container">
+    <div class="text-center mb-5 fade-in">
+      <span class="eyebrow">Galería</span>
+      <h2 class="sec-titulo" id="h-gal">Nuestra escuela en imágenes</h2>
+      <div class="linea mx-auto"></div>
+      <p class="sec-bajada mx-auto">Laboratorios, talleres, eventos y proyectos que hacen a la identidad de la EPET N°18.</p>
+    </div>
+    <div class="galeria-grid fade-in" role="list">
+      <div class="g-item g1" role="listitem">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80"
+             alt="Estudiantes en taller de electromecánica" loading="lazy"/>
+        <div class="g-overlay" aria-hidden="true"><i class="bi bi-zoom-in"></i></div>
+      </div>
+      <div class="g-item g2" role="listitem">
+        <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=80"
+             alt="Laboratorio de la escuela" loading="lazy"/>
+        <div class="g-overlay" aria-hidden="true"><i class="bi bi-zoom-in"></i></div>
+      </div>
+      <div class="g-item g3" role="listitem">
+        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=500&q=80"
+             alt="Estudiantes en clase" loading="lazy"/>
+        <div class="g-overlay" aria-hidden="true"><i class="bi bi-zoom-in"></i></div>
+      </div>
+      <div class="g-item g4" role="listitem">
+        <img src="https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=500&q=80"
+             alt="Proyecto de robótica" loading="lazy"/>
+        <div class="g-overlay" aria-hidden="true"><i class="bi bi-zoom-in"></i></div>
+      </div>
+      <div class="g-item g5" role="listitem">
+        <img src="https://images.unsplash.com/photo-1613909207039-6b173b755cc1?w=500&q=80"
+             alt="Feria de ciencias" loading="lazy"/>
+        <div class="g-overlay" aria-hidden="true"><i class="bi bi-zoom-in"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACTO ══════════════════════════ -->
+<section id="contact" aria-labelledby="h-contact">
+  <div class="container">
+    <div class="text-center mb-5 fade-in">
+      <span class="eyebrow">Contacto</span>
+      <h2 class="sec-titulo" id="h-contact">Estamos para ayudarte</h2>
+      <div class="linea mx-auto"></div>
+      <p class="sec-bajada mx-auto">¿Tenés preguntas sobre inscripciones, programas o actividades? Escribinos o visitanos en Puerto Esperanza.</p>
+    </div>
+    <div class="row gy-4 mb-4">
+
+      <div class="col-lg-5 fade-in">
+        <div class="contacto-info">
+          <h3>Información de Contacto</h3>
+          <p>Comunicate con nosotros por los medios disponibles o visitanos en horario escolar.</p>
+
+          <div class="dato">
+            <div class="dato-ico"><i class="bi bi-geo-alt-fill"></i></div>
+            <div>
+              <div class="dato-lbl">Dirección</div>
+              <div class="dato-val">N3378 Puerto Esperanza<br>Misiones, Argentina</div>
+            </div>
+          </div>
+          <div class="dato">
+            <div class="dato-ico"><i class="bi bi-telephone-fill"></i></div>
+            <div>
+              <div class="dato-lbl">Teléfono</div>
+              <div class="dato-val"><a href="tel:+5437575300570">+54 3757 53-0057</a></div>
+            </div>
+          </div>
+          <div class="dato">
+            <div class="dato-ico"><i class="bi bi-envelope-fill"></i></div>
+            <div>
+              <div class="dato-lbl">Email</div>
+              <div class="dato-val"><a href="mailto:epet18@hotmail.com">epet18@hotmail.com</a></div>
+            </div>
+          </div>
+          <div class="dato">
+            <div class="dato-ico"><i class="bi bi-clock-fill"></i></div>
+            <div>
+              <div class="dato-lbl">Horario de atención</div>
+              <div class="dato-val">Lunes a Viernes · 7:00 – 18:00 hs</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <a href="https://www.facebook.com/epet18esperanza/" target="_blank" rel="noopener"
+               class="social-link" aria-label="Facebook EPET N°18">
+              <i class="bi bi-facebook"></i>
+            </a>
+            <a href="mailto:epet18@hotmail.com" class="social-link" aria-label="Email EPET N°18">
+              <i class="bi bi-envelope"></i>
+            </a>
+            <a href="tel:+5437575300570" class="social-link" aria-label="Teléfono EPET N°18">
+              <i class="bi bi-telephone"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7 fade-in">
+        <div class="contacto-form">
+          <h3>Envianos un Mensaje</h3>
+          <form id="contactForm" novalidate>
+            <div class="row gy-3">
+              <div class="col-sm-6">
+                <label for="cNombre" class="form-label">Nombre completo *</label>
+                <input type="text" id="cNombre" class="form-control" placeholder="Tu nombre" required/>
+              </div>
+              <div class="col-sm-6">
+                <label for="cEmail" class="form-label">Correo electrónico *</label>
+                <input type="email" id="cEmail" class="form-control" placeholder="tu@email.com" required/>
+              </div>
+              <div class="col-12">
+                <label for="cAsunto" class="form-label">Asunto</label>
+                <select id="cAsunto" class="form-select">
+                  <option value="">Seleccioná un tema…</option>
+                  <option>Información sobre inscripción</option>
+                  <option>Programa Electromecánica</option>
+                  <option>Consulta general</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="cMensaje" class="form-label">Mensaje *</label>
+                <textarea id="cMensaje" class="form-control" placeholder="Escribí tu consulta aquí…" required></textarea>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn-enviar">
+                  Enviar mensaje <i class="bi bi-send ms-2"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div id="form-alert" role="alert"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mapa fade-in">
+      <iframe
+        title="Ubicación EPET N°18 Puerto Esperanza Misiones"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14659.8!2d-54.637!3d-26.017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9458155fde5e60ab%3A0xb7f4a4ab9bc90c88!2sPuerto%20Esperanza%2C%20Misiones!5e0!3m2!1ses!2sar!4v1"
+        width="100%" height="380"
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div class="footer-marca">EPET N° 18</div>
+        <p class="footer-desc">Escuela Provincial de Educación Técnica N° 18 — Puerto Esperanza, Misiones. Formando técnicos con excelencia, innovación y compromiso social.</p>
+        <div class="d-flex gap-2">
+          <a href="https://www.facebook.com/epet18esperanza/" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="mailto:epet18@hotmail.com" class="social-link" aria-label="Email"><i class="bi bi-envelope"></i></a>
+          <a href="tel:+5437575300570" class="social-link" aria-label="Teléfono"><i class="bi bi-telephone"></i></a>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-2 offset-lg-1">
+        <div class="footer-titulo">Navegación</div>
+        <ul class="footer-links">
+          <li><a href="#hero">Inicio</a></li>
+          <li><a href="#about">Nosotros</a></li>
+          <li><a href="#programs">Programas</a></li>
+          <li><a href="#news">Noticias</a></li>
+          <li><a href="#gallery">Galería</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-6 col-lg-2">
+        <div class="footer-titulo">Programas</div>
+        <ul class="footer-links">
+          <li><a href="#programs">Ciclo Básico</a></li>
+          <li><a href="#programs">Electromecánica</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <div class="footer-titulo">Contacto</div>
+        <ul class="footer-links">
+          <li><span><i class="bi bi-geo-alt me-2"></i>N3378 Puerto Esperanza, Misiones</span></li>
+          <li><a href="tel:+5437575300570"><i class="bi bi-telephone me-2"></i>+54 3757 53-0057</a></li>
+          <li><a href="mailto:epet18@hotmail.com"><i class="bi bi-envelope me-2"></i>epet18@hotmail.com</a></li>
+          <li><a href="https://www.facebook.com/epet18esperanza/" target="_blank" rel="noopener"><i class="bi bi-facebook me-2"></i>EPET18 Esperanza</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; <span id="anio"></span> Escuela Provincial de Educación Técnica N° 18 · Puerto Esperanza, Misiones, Argentina. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  /* ── Navbar scroll ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── Menú móvil ── */
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const togglerIcon = document.getElementById('togglerIcon');
+  let menuOpen = false;
+
+  menuToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu.style.display = menuOpen ? 'block' : 'none';
+    menuToggle.setAttribute('aria-expanded', String(menuOpen));
+    togglerIcon.className = menuOpen ? 'bi bi-x-lg toggler-icon' : 'bi bi-list toggler-icon';
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuOpen = false;
+      mobileMenu.style.display = 'none';
+      menuToggle.setAttribute('aria-expanded', 'false');
+      togglerIcon.className = 'bi bi-list toggler-icon';
+    });
+  });
+
+  /* ── Link activo al hacer scroll ── */
+  const sections  = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('#navbar .nav-link');
+  const mobileLinks = document.querySelectorAll('#mobileMenu .nav-link');
+
+  const secObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        [...navLinks, ...mobileLinks].forEach(l => l.classList.remove('active'));
+        document.querySelectorAll(`a[href="#${id}"]`).forEach(l => l.classList.add('active'));
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => secObs.observe(s));
+
+  /* ── Fade-in al entrar en pantalla ── */
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.10 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  /* ── Formulario de contacto ── */
+  const form      = document.getElementById('contactForm');
+  const formAlert = document.getElementById('form-alert');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const btn = form.querySelector('.btn-enviar');
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+    setTimeout(() => {
+      formAlert.style.display = 'block';
+      formAlert.innerHTML = '<div class="alert alert-success mt-2"><i class="bi bi-check-circle-fill me-2"></i>¡Mensaje enviado! Nos pondremos en contacto a la brevedad.</div>';
+      form.reset();
+      btn.innerHTML = 'Enviar mensaje <i class="bi bi-send ms-2"></i>';
+      btn.disabled = false;
+      setTimeout(() => { formAlert.style.display = 'none'; }, 6000);
+    }, 1200);
+  });
+
+  /* ── Año en footer ── */
+  document.getElementById('anio').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
